@@ -1,5 +1,8 @@
 {
     "python.pythonPath": "C:\\Users\\phewv\\anaconda3\\envs\\Env_1\\python.exe",
     "python.terminal.activateEnvironment": true,
-    "python.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe"
+    "python.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe",
+    "githubPullRequests.remotes": [
+        "ML-Pipeline"
+    ]
 }
