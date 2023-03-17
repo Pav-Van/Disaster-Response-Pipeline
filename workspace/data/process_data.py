@@ -1,8 +1,25 @@
 import sys
-
+import pandas as pd
 
 def load_data(messages_filepath, categories_filepath):
-    pass
+    '''
+    This function loads data stored in .csv files into the messages and category
+    dataframes. These variables are then merged into a single single dataframe.
+    
+    INPUT:
+
+    messages_filepath - File location for the messages .csv file
+    categories_filepath - File location for the categories .csv file
+
+    OUTPUT:
+
+    df - Merged dataframe containing both the messages and categorys data
+    '''
+    
+    messages = pd.read_csv(messages_filepath)
+    categories = pd.read_csv(categories_filepath)
+    df = messages.merge(categories, on=('id'))
+    return df
 
 
 def clean_data(df):
@@ -22,12 +39,12 @@ def main():
         print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
               .format(messages_filepath, categories_filepath))
         df = load_data(messages_filepath, categories_filepath)
-
+        
         print('Cleaning data...')
         df = clean_data(df)
         
-        print('Saving data...\n    DATABASE: {}'.format(database_filepath))
-        save_data(df, database_filepath)
+        #print('Saving data...\n    DATABASE: {}'.format(database_filepath))
+        #save_data(df, database_filepath)
         
         print('Cleaned data saved to database!')
     
