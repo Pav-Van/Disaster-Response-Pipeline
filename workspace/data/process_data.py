@@ -23,7 +23,51 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
-    pass
+    '''
+    This function cleans and returns a dataframe.
+    
+    INPUT:
+
+    df - Dataframe to be cleaned
+
+    OUTPUT:
+
+    df - Cleaned Dataframe
+    '''
+    
+    # create a dataframe of the 36 individual category columns
+    categories = df['categories'].str.split(';', expand=True)
+    
+    # select the first row of the categories dataframe
+    row = categories.iloc[0]
+    # extract a list of new column names for categories.
+    category_colnames = row.apply(lambda x: x[:-2]).to_list()
+    # rename the columns of `categories`
+    categories.columns = category_colnames
+
+    for column in categories:
+    # set each value to be the last character of the string
+        categories[column] = categories[column].astype(str).str[-1]
+    
+    # convert column from string to numeric
+        categories[column] = categories[column].astype(int)
+
+    # columns that have only one value
+    drop_labels = categories.loc[:,((categories.mean() == 0) | (categories.mean() == 1))].columns.tolist()
+    
+    # drop the columns that only have one value 
+    categories.drop(labels=drop_labels,axis=1, inplace=True)
+
+    # drop the original categories column from `df`
+    df.drop('categories', axis=1, inplace=True)
+    
+    # concatenate the original dataframe with the new `categories` dataframe
+    df = pd.concat([df,categories],axis=1)
+    
+    # drop duplicates
+    df.drop_duplicates(inplace=True)
+       
+    return df
 
 
 def save_data(df, database_filename):
