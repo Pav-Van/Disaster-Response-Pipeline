@@ -1,5 +1,28 @@
 import sys
+import sqlite3
+import pandas as pd
+import numpy as np
+import scipy as sp
+import re
+from sqlalchemy import create_engine
+import joblib
 
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem.wordnet import WordNetLemmatizer
+from nltk.corpus import stopwords
+
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.multioutput import MultiOutputClassifier
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report
+from sklearn.linear_model import LogisticRegression
+
+nltk.download("punkt")
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 def load_data(database_filepath):
     pass
