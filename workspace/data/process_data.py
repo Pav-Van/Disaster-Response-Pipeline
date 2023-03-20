@@ -1,5 +1,6 @@
 import sys
 import pandas as pd
+from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
     '''
@@ -69,10 +70,19 @@ def clean_data(df):
        
     return df
 
-
 def save_data(df, database_filename):
-    pass  
+    '''
+    This function saves the data stored in the df variable into a SQL database.
+    
+    INPUT:
 
+    df - Dataframe storing all the data
+    database_filepath - File location for newley created database
+
+    '''
+    engine = create_engine('sqlite:///' + database_filename)
+    df.to_sql('DisasterResponse', engine, index=False, if_exists='replace')
+       
 
 def main():
         
@@ -87,8 +97,8 @@ def main():
         print('Cleaning data...')
         df = clean_data(df)
         
-        #print('Saving data...\n    DATABASE: {}'.format(database_filepath))
-        #save_data(df, database_filepath)
+        print('Saving data...\n    DATABASE: {}'.format(database_filepath))
+        save_data(df, database_filepath)
         
         print('Cleaned data saved to database!')
     
