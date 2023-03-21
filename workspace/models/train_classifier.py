@@ -47,7 +47,14 @@ def tokenize(text):
 
 
 def build_model():
-    pass
+    
+    pipeline = Pipeline([
+    ('vect', CountVectorizer(tokenizer=tokenize)),
+    ('tfidf', TfidfTransformer()),
+    ('clf', MultiOutputClassifier(estimator=LogisticRegression(max_iter=1000)))
+    ]) 
+    
+    return pipeline
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
@@ -71,13 +78,13 @@ def main():
         print('Training model...')
         model.fit(X_train, Y_train)
         
-        print('Evaluating model...')
-        evaluate_model(model, X_test, Y_test, category_names)
+        #print('Evaluating model...')
+        #evaluate_model(model, X_test, Y_test, category_names)
 
-        print('Saving model...\n    MODEL: {}'.format(model_filepath))
-        save_model(model, model_filepath)
+        #print('Saving model...\n    MODEL: {}'.format(model_filepath))
+        #save_model(model, model_filepath)
 
-        print('Trained model saved!')
+        #print('Trained model saved!')
 
     else:
         print('Please provide the filepath of the disaster messages database '\
