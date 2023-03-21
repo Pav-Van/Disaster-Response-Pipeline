@@ -28,8 +28,11 @@ def load_data(database_filepath):
     
     engine = create_engine('sqlite:///'+ database_filepath)
     df = pd.read_sql_table('DisasterResponse',engine)
-
-    return df
+    X = df.message.values
+    y = df.drop(columns=df.columns[0:4],axis=1)
+    category_names = df.columns
+    
+    return X,y,category_names
 
 
 def tokenize(text):
