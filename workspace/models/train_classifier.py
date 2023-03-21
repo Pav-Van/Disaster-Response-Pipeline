@@ -25,7 +25,11 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 
 def load_data(database_filepath):
-    pass
+    
+    engine = create_engine('sqlite:///'+ database_filepath)
+    df = pd.read_sql_table('DisasterResponse',engine)
+
+    return df
 
 
 def tokenize(text):
