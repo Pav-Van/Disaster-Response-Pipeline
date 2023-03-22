@@ -1,5 +1,4 @@
 import sys
-import sqlite3
 import pandas as pd
 import numpy as np
 import scipy as sp
@@ -46,45 +45,51 @@ def tokenize(text):
     return tokens
 
 
-def build_model():
-    
+def build_model(X_train, Y_train):
+
     pipeline = Pipeline([
     ('vect', CountVectorizer(tokenizer=tokenize)),
     ('tfidf', TfidfTransformer()),
     ('clf', MultiOutputClassifier(estimator=LogisticRegression(max_iter=1000)))
     ]) 
-    
+
+    print('Training model...')
+    pipeline.fit(X_train, Y_train)
+
+    parameters = {
+    'clf__estimator__C': [0.1, 1.0]    
+    }
+
+    cv = GridSearchCV(pipeline,param_grid=parameters)
+
+    cv.fit(X_train,Y_train)
+  
+    pipeline = Pipeline([
+    ('vect', CountVectorizer(tokenizer=tokenize)),
+    ('tfidf', TfidfTransformer()),
+    ('clf', MultiOutputClassifier(estimator=LogisticRegression(max_iter=1000,clf_estimator_C=cv.best_params_['clf_estimator_C'])))
+    ]) 
+
+    pipeline.fit(X_train, Y_train)
+
     return pipeline
 
 
-def evaluate_model(model, X_test, Y_test, X_train, Y_train, category_names):
+def evaluate_model(model, X_test, Y_test, category_names):
     
     y_pred = model.predict(X_test)
-
 
     for col in range(y_pred.shape[1]):
 
         print(classification_report(Y_test.iloc[:,col],y_pred[:,col],labels=np.unique(y_pred[:,col])))
+        print(category_names[col])
         print(col)
-    
-    parameters = {
-
-    'clf__estimator__C': [0.1, 1.0]
-       
-    }
-
-    cv = GridSearchCV(model,param_grid=parameters)
-
-    cv.fit(X_train,Y_train)
-
-    print("\nBest Parameters:", cv.best_params_)
-
-    
-    pass
+      
 
 
 def save_model(model, model_filepath):
-    pass
+
+    joblib.dump(model, model_filepath)
 
 
 def main():
@@ -97,16 +102,13 @@ def main():
         print('Building model...')
         model = build_model()
         
-        print('Training model...')
-        model.fit(X_train, Y_train)
-        
-        #print('Evaluating model...')
-        #evaluate_model(model, X_test, Y_test, X_Train, Y_train category_names)
+        print('Evaluating model...')
+        evaluate_model(model, X_test, Y_test, X_train, Y_train, category_names)
 
-        #print('Saving model...\n    MODEL: {}'.format(model_filepath))
-        #save_model(model, model_filepath)
+        print('Saving model...\n    MODEL: {}'.format(model_filepath))
+        save_model(model, model_filepath)
 
-        #print('Trained model saved!')
+        print('Trained model saved!')
 
     else:
         print('Please provide the filepath of the disaster messages database '\
