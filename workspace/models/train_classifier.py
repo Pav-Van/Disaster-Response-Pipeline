@@ -57,7 +57,29 @@ def build_model():
     return pipeline
 
 
-def evaluate_model(model, X_test, Y_test, category_names):
+def evaluate_model(model, X_test, Y_test, X_train, Y_train, category_names):
+    
+    y_pred = model.predict(X_test)
+
+
+    for col in range(y_pred.shape[1]):
+
+        print(classification_report(Y_test.iloc[:,col],y_pred[:,col],labels=np.unique(y_pred[:,col])))
+        print(col)
+    
+    parameters = {
+
+    'clf__estimator__C': [0.1, 1.0]
+       
+    }
+
+    cv = GridSearchCV(model,param_grid=parameters)
+
+    cv.fit(X_train,Y_train)
+
+    print("\nBest Parameters:", cv.best_params_)
+
+    
     pass
 
 
@@ -79,7 +101,7 @@ def main():
         model.fit(X_train, Y_train)
         
         #print('Evaluating model...')
-        #evaluate_model(model, X_test, Y_test, category_names)
+        #evaluate_model(model, X_test, Y_test, X_Train, Y_train category_names)
 
         #print('Saving model...\n    MODEL: {}'.format(model_filepath))
         #save_model(model, model_filepath)
