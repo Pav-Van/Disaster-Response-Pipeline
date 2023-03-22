@@ -24,7 +24,21 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 
 def load_data(database_filepath):
+    '''
+    This function loads data stored in a database file into the X (feature) 
+    and y (label) variables. The column names are stored in another variable.
     
+    INPUT:
+
+    database_filepath - File location for the database
+
+    OUTPUT:
+
+    X - Feature Dataframe
+    Y - Label Dataframe
+    categroy_names - column names in the dataframe made from the database
+
+    '''
     engine = create_engine('sqlite:///'+ database_filepath)
     df = pd.read_sql_table('DisasterResponse',engine)
     X = df.message.values
@@ -35,64 +49,94 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    This function filters the text variable so that it:
+        1. Only includes letters and numbers.
+        2. Every letter is lower case.
+        3. Tokenize the text.
+        4. Lemmatize the text.
+        5. Strips the text of white space.
+        6. Removes stop words.
     
+    INPUT:
+
+    text - string to be filtered.
+
+    OUTPUT:
+
+    tokens - filtered text that has been tokenized. 
+
+    '''
+    #Removes everything except letters and numbers. Converts to lower case.
     text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
     
     tokens = word_tokenize(text)
-
+    
+    #Lemmatizes, Strips, and removes stopwords from text.
     tokens = [WordNetLemmatizer().lemmatize(w).strip() for w in tokens if w not in stopwords.words("english")]
 
     return tokens
 
 
-def build_model(X_train, Y_train):
+def build_model():
+    '''
+    This function builds the pipeline using:
+        1. Count Vectorizer
+        2. Tfidf Transformer
+        3. Multioutput Classifier with a Logistic Regression estimator.
+    A grid search is used to see what would be the best C value.
 
+    OUTPUT:
+
+    cv - optimized pipeline.
+
+    '''
     pipeline = Pipeline([
     ('vect', CountVectorizer(tokenizer=tokenize)),
     ('tfidf', TfidfTransformer()),
     ('clf', MultiOutputClassifier(estimator=LogisticRegression(max_iter=1000)))
     ]) 
 
-    print('Training model...')
-    pipeline.fit(X_train, Y_train)
-
     parameters = {
     'clf__estimator__C': [0.1, 1.0]    
     }
 
     cv = GridSearchCV(pipeline,param_grid=parameters)
-
-    cv.fit(X_train,Y_train)
-  
-    pipeline = Pipeline([
-    ('vect', CountVectorizer(tokenizer=tokenize)),
-    ('tfidf', TfidfTransformer()),
-    ('clf', MultiOutputClassifier(estimator=LogisticRegression(max_iter=1000,C=cv.best_params_['clf__estimator__C'])))
-    ]) 
-
-    pipeline.fit(X_train, Y_train)
-
-    return pipeline
+ 
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    '''
+    This function creates the prediction variable, and then runs a 
+    classification report to display the precision, recall, and f1-score
+    of each label.
     
+    INPUT:
+
+    model - optimized pipeline
+    X_test - test feature data
+    Y_test - test label data
+    category_names - names of the labels
+
+    '''
     y_pred = model.predict(X_test)
 
     for col in range(y_pred.shape[1]):
 
+        print('Label Name: ' + category_names[col])
         print(classification_report(Y_test.iloc[:,col],y_pred[:,col],labels=np.unique(y_pred[:,col])))
-        print(category_names[col])
-        print(col)
       
 
 
 def save_model(model, model_filepath):
-
+    '''
+    This function saves the optimized model in a specified location as a pickle file.
+    '''
     joblib.dump(model, model_filepath)
 
 
-def main():
+def main():  
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
@@ -100,10 +144,13 @@ def main():
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
         
         print('Building model...')
-        model = build_model(X_train, Y_train)
+        model = build_model()
         
-        print('Evaluating model...')
-        evaluate_model(model, X_test, Y_test, category_names)
+        print('Training model...')
+        model.fit(X_train,Y_train)
+
+        print('Evaluating model...\n')
+        evaluate_model(model, X_test, Y_test, category_names[4:])
 
         print('Saving model...\n    MODEL: {}'.format(model_filepath))
         save_model(model, model_filepath)
