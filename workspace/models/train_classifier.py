@@ -67,7 +67,7 @@ def build_model(X_train, Y_train):
     pipeline = Pipeline([
     ('vect', CountVectorizer(tokenizer=tokenize)),
     ('tfidf', TfidfTransformer()),
-    ('clf', MultiOutputClassifier(estimator=LogisticRegression(max_iter=1000,clf_estimator_C=cv.best_params_['clf_estimator_C'])))
+    ('clf', MultiOutputClassifier(estimator=LogisticRegression(max_iter=1000,C=cv.best_params_['clf__estimator__C'])))
     ]) 
 
     pipeline.fit(X_train, Y_train)
@@ -100,10 +100,10 @@ def main():
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
         
         print('Building model...')
-        model = build_model()
+        model = build_model(X_train, Y_train)
         
         print('Evaluating model...')
-        evaluate_model(model, X_test, Y_test, X_train, Y_train, category_names)
+        evaluate_model(model, X_test, Y_test, category_names)
 
         print('Saving model...\n    MODEL: {}'.format(model_filepath))
         save_model(model, model_filepath)
