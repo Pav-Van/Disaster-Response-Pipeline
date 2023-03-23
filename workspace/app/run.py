@@ -15,6 +15,19 @@ from sqlalchemy import create_engine
 app = Flask(__name__)
 
 def tokenize(text):
+    '''
+    This function Tokenizes strings. Lemmatization, lower, and strip functions
+    are used to clean the text.
+
+    INPUT:
+
+    text - string to be filtered.
+
+    OUTPUT:
+
+    tokens - filtered text that has been tokenized.   
+    
+    '''   
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 
