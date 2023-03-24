@@ -16,14 +16,37 @@ are recieved during emergency situations.
 
 ## File Descriptions
 
-The preliminary code is kept in the "Jupyter Notebook" directory. The "workspace" directory contains three python scripts, to HTML files,
-two csv files holding the raw data, one generate database file with the clean data used to train the model, and a pickle file that holds
-the trained model.
+* Juptyer Notebooks
+    * categories.csv # data to process
+    * DisasterResponse.db # database to save clean data to
+    * ETL Pipeline Preperation.ipynb # Preliminary ETL pipeline code
+    * messages.csv # data to process
+    * ML Pipeline Preparation.ipynb # Preliminary ML pipeline code
+    * Pipeline_log.pkl # Preliminary saved model
+    
+* workspace
+    * app
+        * templates
+            * go.html # classification result page of web app
+            * master.html # main page of web app
+        * run.py # Flask file that runs app
+    * data
+        * disaster_categories.csv # data to process
+        * disaster_messages.csv # data to process
+        * DisasterResponse.db # database to save clean data to
+        * process_data.py # Python script that cleans data
+    * models
+        * classifier.pkl # saved model
+        * train_classifier.py # Python script that creates the classifier
+        
+* .gitignore # holds filenames that are not tracked by Git
+* LICENSE.md # MIT License information
+* README.md
 
 ## Results
 
 The classifer I used (Logistic Regression) does an average job at categorizing the messages. There is still alot of room for improvement. Testing
-different classifiers would probably help the accuracy of the classification. Based on the heatmap, it looks like a vast majority of the categories do not correlate with each other. The "related" category was used the most in the training data, followed by "aid_related" and "weather_related"
+different classifiers would probably help the accuracy of the classification. Based on the heatmap, it looks like a vast majority of the categories do not correlate with each other. The "related" category was used the most in the training data, followed by the "aid_related" and "weather_related" categories
 
 ## Licensing, Authors, Acknowledgements
 
