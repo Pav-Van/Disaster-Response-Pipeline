@@ -8,7 +8,7 @@ The Anaconda distribution of Python is needed to run the code, no additional lib
 
 This project classifies messages typically transmitted because of emergency situations. There are thirty five different categories 
 the message could be classified as. The dataset supplied by Appen was used to train a machine learning pipeline that uses a 
-logistic regression classifier. When this project in run, it builds a web application that allows the user to enter a message.
+logistic regression classifier. When this project is run, it builds a web application that allows the user to enter a message.
 Once the message is entered, the user can hit the "Classify Message" button to see how the message was classified. If there is
 a "1" next to any category, it means the message was classified as relating to that category. The web app also shows some visualizations
 that describe the training data. This web app was built to help emergency response teams filter and organize the many messages that
