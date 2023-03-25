@@ -72,6 +72,9 @@ def clean_data(df):
     # drop duplicates
     df.drop_duplicates(inplace=True)
 
+    # replace 2 with 0
+    df["related"].replace(2, 0, inplace=True)
+
     return df
 
 
