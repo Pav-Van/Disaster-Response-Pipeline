@@ -222,8 +222,10 @@ def main():
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
-        X, Y, category_names = load_data(database_filepath)
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
+        X, y, category_names = load_data(database_filepath)
+        X_sub, y_sub = get_minority_samples(X, y)  # Getting minority samples of that datframe
+        X_res, y_res = MLSMOTE(X_sub, y_sub, 100, 5)  # Applying MLSMOTE to augment the dataframe
+        X_train, X_test, Y_train, Y_test = train_test_split(X_res, y_res, test_size=0.2)
 
         print('Building model...')
         model = build_model()
