@@ -25,7 +25,8 @@ nltk.download('omw-1.4')
 
 def load_data(database_filepath):
     '''
-    This function loads data stored in a database file into the X (feature) 
+    load_data
+    Loads data stored in a database file into the X (feature) 
     and y (label) variables. The column names are stored in another variable.
     
     INPUT:
@@ -50,7 +51,8 @@ def load_data(database_filepath):
 
 def tokenize(text):
     '''
-    This function filters the text variable so that it:
+    tokenize
+    Filters the text variable so that it:
         1. Only includes letters and numbers.
         2. Every letter is lower case.
         3. Tokenize the text.
@@ -80,7 +82,8 @@ def tokenize(text):
 
 def build_model():
     '''
-    This function builds the pipeline using:
+    build_model
+    Builds the pipeline using:
         1. Count Vectorizer
         2. Tfidf Transformer
         3. Multioutput Classifier with a Logistic Regression estimator.
@@ -108,7 +111,8 @@ def build_model():
 
 def evaluate_model(model, X_test, Y_test, category_names):
     '''
-    This function creates the prediction variable, and then runs a 
+    evaluate_model
+    Creates the prediction variable, and then runs a 
     classification report to display the precision, recall, and f1-score
     of each label.
     
@@ -131,7 +135,8 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 def save_model(model, model_filepath):
     '''
-    This function saves the optimized model in a specified location as a pickle file.
+    save_model
+    Saves the optimized model in a specified location as a pickle file.
     '''
     joblib.dump(model, model_filepath)
 

@@ -4,7 +4,8 @@ from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
     '''
-    This function loads data stored in .csv files into the messages and category
+    load_data
+    Loads data stored in .csv files into the messages and category
     dataframes. These variables are then merged into a single single dataframe.
     
     INPUT:
@@ -25,7 +26,8 @@ def load_data(messages_filepath, categories_filepath):
 
 def clean_data(df):
     '''
-    This function cleans and returns a dataframe.
+    clean_data
+    Cleans data and returns a dataframe.
     
     INPUT:
 
@@ -72,7 +74,8 @@ def clean_data(df):
 
 def save_data(df, database_filename):
     '''
-    This function saves the data stored in the df variable into a SQL database.
+    save_data
+    Saves the data stored in the df variable into a SQL database.
     
     INPUT:
 
