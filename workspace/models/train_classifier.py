@@ -16,7 +16,7 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report
-from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
 
 nltk.download("punkt")
 nltk.download('stopwords')
@@ -99,11 +99,11 @@ def build_model():
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
-        ('clf', MultiOutputClassifier(estimator=LogisticRegression(max_iter=1000)))
+        ('clf', MultiOutputClassifier(estimator=DecisionTreeClassifier()))
         ])
 
     parameters = {
-        'clf__estimator__C': [0.1, 1.0]
+        'Min_Samples_Split': [1, 2]
         }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
