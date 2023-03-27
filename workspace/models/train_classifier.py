@@ -103,7 +103,7 @@ def build_model():
         ])
 
     parameters = {
-        'Min_Samples_Split': [1, 2]
+        "clf__estimator__criterion": ['gini', 'entropy']
         }
 
     cv = GridSearchCV(pipeline, param_grid=parameters)
