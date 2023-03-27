@@ -106,7 +106,7 @@ def build_model():
         "clf__estimator__criterion": ['gini', 'entropy']
         }
 
-    cv = GridSearchCV(pipeline, param_grid=parameters)
+    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=3)
 
     return cv
 
